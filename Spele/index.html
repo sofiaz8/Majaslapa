@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mana_spele</title>
+</head>
+
+<body>
+
+    <canvas id="mansZimejums" width=300 height=300 style="border: 3px solid"> </canvas>
+    <script>
+        const mansZimejums = document.getElementById("mansZimejums");
+        const ctx = mansZimejums.getContext("2d");
+
+        let human_x = 0; // Cilvēka ikonas sākuma pozīcija X
+        let human_y = 0; // Cilvēka ikonas pozīcija Y (paliek uz zemes)
+        let humanIcon = new Image();
+        humanIcon.src = "https://cdn-icons-png.flaticon.com/128/2353/2353678.png"; // Izmanto savu "domājošā cilvēka" ikonas attēlu
+
+        let item_x = 0; // Kritiskā objekta sākuma pozīcija X
+        let item_y = 0; // Kritiskā objekta sākuma pozīcija Y
+        let fallingItem = new Image();
+        fallingItem.src = "https://cdn-icons-png.flaticon.com/128/2400/2400629.png"; // Kritiskais objekts (var būt jebkura bilde, piemēram, "pile.png")
+
+        const humanWidth = 50; // Cilvēka ikonas platums
+        const humanHeight = 50; // Cilvēka ikonas augstums
+
+        const itemWidth = 50; // Kritiskā objekta platums
+        const itemHeight = 20; // Kritiskā objekta augstums
+
+        let score = 0; // Iniciējam punktu skaitu
+
+        // Funkcija, kas apstrādā taustiņu spiedienus, lai pārvietotu cilvēku
+        function MyKeyDownHandler(MyEvent) {
+            if (MyEvent.keyCode == 37 && human_x > 0) {
+                human_x = human_x - 10; // Pārvieto pa kreisi
+            }
+            if (MyEvent.keyCode == 39 && human_x + humanWidth < mansZimejums.width) {
+                human_x = human_x + 10; // Pārvieto pa labi
+            }
+        }
+
+        addEventListener("keydown", MyKeyDownHandler);
+
+        // Funkcija, kas atjauno ekrānu katrā ciklā
+        function Laukums() {
+            human_y = mansZimejums.height - humanHeight; // Cilvēks paliek apakšā
+
+            ctx.clearRect(0, 0, mansZimejums.width, mansZimejums.height); // Notīra iepriekšējo attēlu
+
+            // Zīmē cilvēka ikonu jaunajā pozīcijā
+            ctx.drawImage(humanIcon, human_x, human_y, humanWidth, humanHeight);
+
+            // Pārvieto kritisko objektu uz leju
+            item_y = item_y + 3;
+
+            // Ja objekts ir izgājis no ekrāna apakšas, atjaunojam tā pozīciju
+            if (item_y > mansZimejums.height) {
+                item_y = 0;
+                item_x = Math.random() * (mansZimejums.width - itemWidth); // Nejauša X pozīcija
+            }
+
+            // Zīmē kritisko objektu
+            ctx.drawImage(fallingItem, item_x, item_y, itemWidth, itemHeight);
+
+            // Pārbauda, vai objekts ir nonācis virs cilvēka (saskarē)
+            if (item_y + itemHeight > human_y && item_x + itemWidth > human_x && item_x < human_x + humanWidth) {
+                score++; // Palielina punktus, ja cilvēks noķer objektu
+                item_y = 0; // Atjauno objekta pozīciju
+                item_x = Math.random() * (mansZimejums.width - itemWidth); // Nejauša X pozīcija
+            }
+
+            // Attēlo punktu skaitu
+            ctx.fillStyle = "black";
+            ctx.font = "20px Arial";
+            ctx.fillText("Punkti: " + score, 10, 30);
+        }
+
+        // Atjauno spēli ik pēc 25 milisekundēm
+        setInterval(Laukums, 25);
+    </script>
+</body>
+
+</html>
