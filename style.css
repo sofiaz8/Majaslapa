@@ -108,12 +108,27 @@ background-color: aquamarine;
 width: 400px;
 border: 2px solid crimson; 
 
-.Pakalpojumi{
+
     
 }
 
 
 
-
+.Spele {
+    width: 500px;
+    margin: 20px auto;
+    overflow: hidden;
+    border: 2px solid #8b4f00;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #7a4700;
+    text-align: center;
 }
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    background-color: rgb(106, 56, 2);
+}
+
 

@@ -40,20 +40,100 @@
             </ul>
         </div>
         <div class="Spele">
-        <!-- Speles kods -->
+            <canvas id="mansZimejums" width="500" height="300" style="display:block; margin:0 auto; background:#fff; border:1px solid #ccc;"></canvas>
+            <script>
+                const mansZimejums = document.getElementById("mansZimejums");
+                const ctx = mansZimejums.getContext("2d");
+        
+                const humanWidth = 50;
+                const humanHeight = 50;
+                const itemWidth = 50;
+                const itemHeight = 20;
+        
+                let human_x = 0;
+                let human_y = mansZimejums.height - humanHeight;
+        
+                let item_x = Math.random() * (mansZimejums.width - itemWidth);
+                let item_y = 0;
+        
+                let score = 0;
+                let gameOver = false;
+        
+                let humanIcon = new Image();
+                humanIcon.src = "https://cdn-icons-png.flaticon.com/128/2353/2353678.png";
+        
+                let fallingItem = new Image();
+                fallingItem.src = "https://cdn-icons-png.flaticon.com/128/2400/2400629.png";
+        
+                function MyKeyDownHandler(MyEvent) {
+                    if (gameOver) return;
+        
+                    if (MyEvent.keyCode == 37 && human_x > 0) {
+                        human_x -= 10;
+                    }
+                    if (MyEvent.keyCode == 39 && human_x + humanWidth < mansZimejums.width) {
+                        human_x += 10;
+                    }
+                }
+        
+                addEventListener("keydown", MyKeyDownHandler);
+        
+                function Laukums() {
+                    if (gameOver) {
+                        ctx.fillStyle = "red";
+                        ctx.font = "40px Arial";
+                        ctx.fillText("Spēles Beigas", mansZimejums.width / 2 - 100, mansZimejums.height / 2);
+                        return;
+                    }
+        
+                    ctx.clearRect(0, 0, mansZimejums.width, mansZimejums.height);
+        
+                    ctx.drawImage(humanIcon, human_x, human_y, humanWidth, humanHeight);
+        
+                    item_y += 3;
+                    if (item_y + itemHeight >= mansZimejums.height) {
+                        item_y = 0;
+                        item_x = Math.random() * (mansZimejums.width - itemWidth);
+                    }
+                    ctx.drawImage(fallingItem, item_x, item_y, itemWidth, itemHeight);
+        
+                    if (
+                        item_y + itemHeight >= human_y &&
+                        item_x < human_x + humanWidth &&
+                        item_x + itemWidth > human_x
+                    ) {
+                        score++;
+                        item_y = 0;
+                        item_x = Math.random() * (mansZimejums.width - itemWidth);
+        
+                        if (score >= 10) {
+                            gameOver = true;
+                        }
+                    }
+        
+                    ctx.fillStyle = "black";
+                    ctx.font = "20px Arial";
+                    ctx.fillText("Punkti: " + score, 10, 30);
+                }
+        
+                setInterval(Laukums, 25);
+            </script>
         </div>
+        
+        </div>
+        
     </section>
 
     <section class="galerija">
         <h2>Galerija</h2>
         <div class="gallery-images">
-            <img src="https://th.bing.com/th/id/OIP.av9sMZfecnH-e7INfv4t6gHaEJ?w=307&h=180&c=7&r=0&o=5&pid=1.7"
+            <img src="OIP.jpg"
                 height="200" alt="Interior 1">
-            <img src="https://cityfurnish.com/blog/wp-content/uploads/2023/09/modren-room-home-interior-design-min.jpg"
+            <img src="mod.jpg"
                 height="200" alt="interior 2">
-            <img src="https://th.bing.com/th/id/OIP.okQ0SGFrbCRFvgY3R7prwgHaE7?w=306&h=204&c=7&r=0&o=5&pid=1.7"
+            <img src="la.jpg"
                 height="200" alt="Interior 3">
-            <img src="https://th.bing.com/th/id/OIP.lXW4VWb3hc6W5lYUjMYwNwHaHa?w=204&h=204&c=7&r=0&o=5&pid=1.7"
+            <img src="OIP (1).jpg"
                 height="200" alt="Interior 4">
         </div>
     </section>
